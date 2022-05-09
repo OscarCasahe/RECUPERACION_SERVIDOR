@@ -1,0 +1,124 @@
+package org.iesalixar.dao;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+
+import org.iesalixar.bd.PoolDB;
+import org.iesalixar.model.OrderDetail;
+import org.iesalixar.model.Product;
+
+public class DAOOrderDetailsImpl implements DAOOrderDetails {
+
+	@Override
+	public ArrayList<OrderDetail> getDetailsFromOrder(int orderNumber) {
+		
+		ArrayList<OrderDetail> orderdetails = new ArrayList<OrderDetail>();
+		OrderDetail od = null;
+		Product product = null;
+		Connection con = null;
+
+		try {
+
+			String sql = "select * from orderdetails where  orderNumber = ?";
+			PoolDB pool = new PoolDB();
+			con = pool.getConnection();
+			PreparedStatement statement = con.prepareStatement(sql);
+			statement.setInt(1, orderNumber);
+			
+
+			ResultSet rs = statement.executeQuery();
+
+			// Como el campo de búsqueda es la clave solo debería obtener un resultado
+			// si no es así estaremos machacando cada vez el valor de customer y
+			while (rs.next()) {
+
+				
+				od = new OrderDetail();
+				od.setOrderLineNumber(rs.getInt("orderLineNumber"));
+				od.setPriceEach(rs.getDouble("priceEach"));
+				od.setQuantityOrdered(rs.getInt("quantityOrdered"));
+				
+				String productCode = rs.getString("productCode");
+				
+				DAOProductImpl daoProduct = new DAOProductImpl();
+				
+				
+				product =daoProduct.getProductByCode(productCode);
+				
+				od.setProduct(product);
+				
+				orderdetails.add(od);
+				
+
+			}
+
+		} catch (SQLException ex) {
+			System.out.println(ex.getMessage());
+		} finally {
+			try {
+				con.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+
+		return orderdetails;
+
+	}
+
+	@Override
+	public ArrayList<OrderDetail> getAllOrderDetailsFromOrder(int orderNumber) {
+		ArrayList<OrderDetail> orderdetails = new ArrayList<OrderDetail>();
+		OrderDetail od = null;
+		Connection con = null;
+
+		try {
+
+			String sql = "SELECT p.productName ,o.quantityOrdered , o.priceEach \r\n"
+					+ "from orderdetails o inner join orders o2 on o.orderNumber = o2.orderNumber \r\n"
+					+ "inner join products p on o.productCode = p.productCode \r\n"
+					+ "where o.orderNumber = ? ;";
+			PoolDB pool = new PoolDB();
+			con = pool.getConnection();
+			PreparedStatement statement = con.prepareStatement(sql);
+			statement.setInt(1, orderNumber);
+			
+
+			ResultSet rs = statement.executeQuery();
+
+			while (rs.next()) {
+
+				
+				od = new OrderDetail();
+				od.setProductName(rs.getString("productName"));
+				od.setPriceEach(rs.getDouble("priceEach"));
+				od.setQuantityOrdered(rs.getInt("quantityOrdered"));
+				
+				
+				
+				orderdetails.add(od);
+				
+
+			}
+
+		} catch (SQLException ex) {
+			System.out.println(ex.getMessage());
+		} finally {
+			try {
+				con.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+
+		return orderdetails;
+
+	
+	}
+
+}
