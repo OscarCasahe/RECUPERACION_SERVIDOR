@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head th:replace="fragments/bootstrap::head(title='Main')"></head>
+<body>
+	<div class="container mt-5">
+		<div class="row mt-5 justify-content-center">
+			<header th:insert="fragments/parts::menu"></header>
+			<div class="col-10 mt-5 mb-5">
+			
+				
+				<h1 sec:authorize="isAuthenticated()">Lista de Usuarios</h1>
+				<table sec:authorize="isAuthenticated()" class="table table-stripped table-hover">
+						<thead class="table-light">
+						<tr>
+							<th>Nombre</th>
+							<th>Apellido</th>
+							<th>Nombre de Usuariio</th>
+							<th>Role</th>
+							<th></th>
+						</tr>
+						</thead>					
+						<tbody>
+						 <tr th:each="u : ${usuarios}">
+						 	<td th:text="${u.getNombre()}"></td>
+						 	<td th:text="${u.getApellidos()}"></td>
+						 	<td th:text="${u.getUserName()}"></td>
+						 	<td th:text="${u.getRole()}"></td>
+						 	<td><a th:href="@{'/usuarios/delete?codigo='+${u.getId()}}"><i class="bi bi-trash-fill"></i></a></td>
+						 </tr>					
+						</tbody>
+					</table>
+			</div>		
+			<footer th:replace="fragments/parts::footer(info='menu.users')"></footer>
+		</div>
+	</div>
+</body>
+</html> 

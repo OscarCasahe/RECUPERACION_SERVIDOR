@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head th:replace="fragments/bootstrap::head(title='Report Matricula')"></head>
+<body>
+	<div class="container mt-5">
+		<div class="row mt-5 justify-content-center">
+			<header th:insert="fragments/parts::menu"></header>
+			<div class="col-10 mt-5 mb-5">
+			
+			
+			<h2 class="mb-5" th:text="${asignatura.getNombre()}"></h2>
+			
+				
+			<h5>Matriculas de Alumnos: <span th:text="${matriculados.size()}"></span></h5>
+			<h5>Matriculas Aprobados: <span th:text="${aprobados}"></span></h5>
+			<h5>Matriculas Suspensos: <span th:text="${suspensos}"></span></h5>
+
+			</div>		
+		</div>
+	</div>
+</body>
+</html> 

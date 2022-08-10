@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head th:replace="fragments/bootstrap::head(title='Profesores')"></head>
+<body>
+	<div class="container mt-5">
+		<div class="row mt-5 justify-content-center">
+			<header th:insert="fragments/parts::menu"></header>
+			<div class="col-10 mt-5 mb-5">
+				<h3>Lista de Matriculas de:<h3 th:text="${grado.getNombre()}"></h3></h3>
+			
+				<table class="table table-stripped table-hover">
+				
+				
+						<thead class="table-light">
+						<tr>
+							<th>Asignatura</th>
+							<th>Alumno</th>
+							<th>Nota</th>
+							<th sec:authorize="hasRole('ROLE_ADMIN')"></th>
+							
+						</tr>
+						</thead>					
+						<tbody>
+						    <span th:each="a : ${asignaturas}">
+
+						            <tr th:each="aa : ${a.getAlumnosAsignatura()}">
+						            
+						            	<td th:text="${aa.getAsignatura().getNombre()}"></td>
+						            	<td th:text="${aa.getAlumno().getNombre()}+''+${aa.getAlumno().getApellido1()}"></td>
+						            	<td th:text="${aa.getNota()}"></td>
+						            	<td><a sec:authorize="hasRole('ROLE_ADMIN')" th:href="@{/grados/estudiantes/editarnota(alum=${aa.getAlumno().getId()},(asig=${aa.getAsignatura().getId()}))}"><i class="bi bi-pencil-fill"></i></a></td>
+						            	
+						            </tr>
+						    </span>				
+						</tbody>
+					</table>
+					
+			</div>		
+		</div>
+	</div>
+</body>
+</html>

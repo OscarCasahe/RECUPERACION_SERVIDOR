@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head th:replace="fragments/bootstrap::head(title='Add Matricula')"></head>
+<body>
+	<div class="container mt-5">
+		<div class="row mt-5 justify-content-center">
+			<header th:insert="fragments/parts::menu"></header>
+			
+		<div th:if="${error!=null}" class="alert alert-danger alert-dismissible fade show mt-3" role="alert">
+			<strong>Error!</strong> El alumno ya esta matriculado</span>
+			<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+				<span aria-hidden="true">&times;</span>
+			</button>
+		</div>
+			
+			
+			
+			<div class="col-6">
+			<h3>Add alumno a:<span th:text="${asignatura.get().getNombre()}"></span></h3>
+			
+				<form th:action="@{/matriculas/add}" method="post"	th:object="${matricula}">
+				
+				
+					<label for="alumno" class="form-label mt-3">Alumno</label>
+					
+					<select id="alumno" name="alumno" class="form-select form-select-lg mb-3"  th:field="*{id_alumno}">
+					
+						<option th:each="a : ${alumnos}" th:value="${a.getId()}" th:text="${a.nombre}+' '+${a.apellido1}+' '+${a.apellido2}"></option>
+					
+					</select>
+					
+					
+					<label for="nota" class="form-label mt-3">Nota</label>
+					<input type="nota" class="form-control" name="nota" id="nota" th:field="*{nota}" required>
+					
+    				<input type="hidden" class="form-control" id="asignatura" name="asignatura" th:field="*{id_asignatura}" th:value="${asignatura.get().getId()}">
+										
+						
+									
+					<input type="submit" class="btn btn-primary w-100 mt-3" value="Matricular" />	
+				</form>
+			</div>
+		</div>
+	</div>
+</body>
+</html>

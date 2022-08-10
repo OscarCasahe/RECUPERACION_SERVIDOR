@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head th:replace="fragments/bootstrap::head(title='List Matriculados')"></head>
+<body>
+	<div class="container mt-5">
+		<div class="row mt-5 justify-content-center">
+			<header th:insert="fragments/parts::menu"></header>
+			<div class="col-10 mt-5 mb-5">
+			
+				
+			<h3>Matriculas de <span th:text="${asignatura.getNombre()}"></span></h3>
+				<table sec:authorize="isAuthenticated()" class="table table-stripped table-hover">
+						<thead class="table-light">
+						<tr>
+							<th>Nombre</th>
+							<th>Apellido 1</th>
+							<th>Apellido 2</th>
+							<th>Nota</th>
+							<th></th>
+						</tr>
+						</thead>					
+						<tbody>
+						 <tr th:each="a : ${matriculados}">
+						 	<td th:text="${a.getAlumno().getNombre()}"></td>
+						 	<td th:text="${a.getAlumno().getApellido1()}"></td>
+						 	<td th:text="${a.getAlumno().getApellido2()}"></td>
+						 	<td th:text="${a.getNota()}"></td>
+						    <td><a sec:authorize="hasRole('ROLE_ADMIN')" th:href="@{/matriuclas/delete(alum=${a.getAlumno().getId()},(asig=${a.getAsignatura().getId()}))}"><i class="bi bi-trash-fill"></i></a></td>
+						 </tr>					
+						</tbody>
+					</table>
+			</div>		
+		</div>
+	</div>
+</body>
+</html> 
